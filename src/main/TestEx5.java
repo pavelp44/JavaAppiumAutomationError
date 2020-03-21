@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -12,7 +13,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestEx5 {
@@ -185,6 +188,7 @@ public class TestEx5 {
         return true;
     }
 
+
     private WebElement waitForElementPresent(By by, String error_meesage, long timeoutInSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_meesage + "\n");
@@ -219,7 +223,39 @@ public class TestEx5 {
         element.clear();
         return element;
     }
+    protected void swipeUp(int timeOfSwipe){
+        Dimension size = driver.manage().window().getSize();
 
+        int x = size.width/2;
+        int start_y = (int) (size.height*0.8);
+        int end_y = (int) (size.height*0.2);
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(x,start_y)
+                .waitAction(timeOfSwipe)
+                .moveTo(x,end_y)
+                .release()
+                .perform();
+
+    }
+    protected void swipeUpQuick(){
+        swipeUp(200);
+    }
+
+    protected void swipeUpToFindElement(By by, String error_message, int max_swipes){
+        int already_swiped = 0;
+        while (driver.findElements(by).size() == 0){
+
+            if (already_swiped > max_swipes){
+                waitForElementPresent(by, "Cannot find element by swiping Up \n" + error_message, 0);
+                return;
+            }
+
+            swipeUpQuick();
+            already_swiped++;
+        }
+    }
 
     protected void swipeElementToLeft(By by, String error_message){
         WebElement element = waitForElementPresent(by, error_message);
@@ -244,6 +280,26 @@ public class TestEx5 {
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("android.widget.TextView")));
     }
 
+    private int getAmountOfElements(By by){
+
+        List elements = driver.findElements(by);
+        return elements.size();
+
+    }
+
+    private void assertElementNotPresent(By by, String error_message){
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements > 0){
+            String default_message = "An element '" + by.toString() + "' supposed to be not present";
+            throw new AssertionError(default_message + " " + error_message);
+
+        }
+    }
+
+    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        return element.getAttribute(attribute);
+    }
 
 }
 
