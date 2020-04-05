@@ -7,14 +7,14 @@ import org.openqa.selenium.WebElement;
     public class ArticlePageObject extends MainPageObject {
 
     private static final String
-        TITLE = "org.wikipedia:id/view_page_title_text",
-        FOOTER_ELEMENT = "//*[@text='View page in browser']",
-        OPTIONS_BUTTON = "//android.widget.ImageView[@content-desc='More options']",
-        OPTIONS_ADD_TO_MY_LIST_BUTTON = "//*[@text='Add to reading list']",
-        ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
-        MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
-        MY_LIST_OK_BUTTON = "//*[@text='OK']",
-        CLOSE_ARTICLE_BUTTON = "//*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageButton']";
+        TITLE = "id:org.wikipedia:id/view_page_title_text",
+        FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
+        OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
+        OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
+        ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
+        MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
+        MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
+        CLOSE_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageButton']";
 
 
         public ArticlePageObject(AppiumDriver driver){
@@ -22,7 +22,7 @@ import org.openqa.selenium.WebElement;
     }
     public WebElement waitForTitleElement(){
         return this.waitForElementPresent(
-                By.id(TITLE),
+                TITLE,
                 "Cannot find article title on page",
                 10);
 }
@@ -33,7 +33,7 @@ import org.openqa.selenium.WebElement;
 }
     public void swipeToFooter(){
             this.swipeUpToFindElement(
-                    By.xpath(FOOTER_ELEMENT),
+                    FOOTER_ELEMENT,
                     "Cannot find the end of article",
                     20);
 
@@ -43,7 +43,7 @@ import org.openqa.selenium.WebElement;
             MainPageObject mainPageObject = new MainPageObject(driver);
 
         mainPageObject.waitForElementAndClick(
-                By.xpath(OPTIONS_BUTTON),
+                OPTIONS_BUTTON,
                 "Cannot find three dots menu",
                 5
         );
@@ -51,22 +51,22 @@ import org.openqa.selenium.WebElement;
         mainPageObject.waitAllTestViewsToRender();
 
         mainPageObject.waitForElementAndClick(
-                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 "Cannot find 'Add to reading list' ",
                 5);
 
         mainPageObject.waitForElementAndClick(
-                By.id(ADD_TO_MY_LIST_OVERLAY),
+                ADD_TO_MY_LIST_OVERLAY,
                 "Cannot find 'Got it' tip overlay",
                 5);
 
         mainPageObject.waitForElementAndClear(
-                By.id(MY_LIST_NAME_INPUT),
+                MY_LIST_NAME_INPUT,
                 "Cannot find text input for reading list name",
                 5);
 
         mainPageObject.setAndroidElementValue(
-                By.id(MY_LIST_NAME_INPUT),
+                MY_LIST_NAME_INPUT,
                 name_of_folder,
                 "Cannot find text input for reading list name"
         );
@@ -77,7 +77,7 @@ import org.openqa.selenium.WebElement;
 //                5);
 
         mainPageObject.waitForElementAndClick(
-                By.xpath(MY_LIST_OK_BUTTON),
+                MY_LIST_OK_BUTTON,
                 "Cannot click OK to create reading list",
                 5);
 
@@ -86,7 +86,7 @@ import org.openqa.selenium.WebElement;
     }
 
     public void close_article(){
-        this.waitForElementAndClick(By.xpath(CLOSE_ARTICLE_BUTTON),
+        this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON,
                 "Cannot find and click close button",
                 20);
     }
