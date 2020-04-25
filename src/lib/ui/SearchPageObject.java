@@ -1,24 +1,24 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.ui.factories.ArticlePageObjectFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
 
-public class SearchPageObject extends MainPageObject{
+abstract public class SearchPageObject extends MainPageObject{
 
-    public static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[@text='Search Wikipedia']",
-            SEARCH_INPUT = "xpath://*[contains(@text,'Search…')]",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@class='android.widget.TextView'][@text='{subString}']",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results found']";
+    public static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULT_ELEMENT,
+            SEARCH_EMPTY_RESULT_ELEMENT;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    // Template Methods
 
     private static String getSearchResultElement(String subString){
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{subString}", subString);
@@ -76,14 +76,13 @@ public class SearchPageObject extends MainPageObject{
     }
 
     public void testChangeScreenOrientationOnSearchResults(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
 
-        searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Java");
+        this.initSearchInput();
+        this.typeSearchLine("Java");
 
-        searchPageObject.clickByArticleWithSubString("Java (programming language)");
+        this.clickByArticleWithSubString("Java (programming language)");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
         String article_before_rotation = articlePageObject.getArticleTitle();
 

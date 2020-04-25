@@ -1,20 +1,21 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-    public class ArticlePageObject extends MainPageObject {
+    public abstract class ArticlePageObject extends MainPageObject {
 
-    private static final String
-        TITLE = "id:org.wikipedia:id/view_page_title_text",
-        FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-        OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-        OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-        ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-        MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-        MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-        CLOSE_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageButton']";
+    protected static String
+        TITLE,
+        FOOTER_ELEMENT,
+        OPTIONS_BUTTON,
+        OPTIONS_ADD_TO_MY_LIST_BUTTON,
+        ADD_TO_MY_LIST_OVERLAY,
+        MY_LIST_NAME_INPUT,
+        MY_LIST_OK_BUTTON,
+        CLOSE_ARTICLE_BUTTON;
+
 
 
         public ArticlePageObject(AppiumDriver driver){
@@ -29,14 +30,22 @@ import org.openqa.selenium.WebElement;
 
     public String getArticleTitle(){
         WebElement titleElement = waitForTitleElement();
-        return titleElement.getAttribute("text");
+        if (Platform.getInstance().isAndroid()) {
+            return titleElement.getAttribute("text");
+        }
+        else return titleElement.getAttribute("name");
 }
-    public void swipeToFooter(){
+    public void swipeToFooter() {
+
+        if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(
                     FOOTER_ELEMENT,
                     "Cannot find the end of article",
-                    20);
+                    40);
 
+        } else {
+            swipeUpTillElementAppear(FOOTER_ELEMENT, "Cannot find the end of article", 40);
+        }
     }
 
     public void addArticleToMyList(String name_of_folder){
@@ -90,6 +99,12 @@ import org.openqa.selenium.WebElement;
                 "Cannot find and click close button",
                 20);
     }
+
+    public void addArticlesToMySaved(){
+            this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                    "Cannot find option to add article to reading list",
+                    5);
+        }
 
 
 }
