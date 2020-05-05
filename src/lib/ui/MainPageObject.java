@@ -78,7 +78,11 @@ public class MainPageObject {
 
     public void waitAllTestViewsToRender(){
         WebDriverWait wait = new WebDriverWait(driver,5);
-        wait.until(presenceOfAllElementsLocatedBy(By.xpath("//*[@class='android.widget.TextView']")));
+        if (Platform.getInstance().isAndroid()){
+            wait.until(presenceOfAllElementsLocatedBy(By.xpath("//*[@class='android.widget.TextView']")));
+        } else {
+            wait.until(presenceOfAllElementsLocatedBy(By.xpath("id:Wikipedia")));
+        }
     }
 
 
@@ -138,22 +142,23 @@ public class MainPageObject {
     }
 
     public void clickToTheRightUpperCorner(String locator, String error_message){
-        WebElement element = this.waitForElementPresent(locator = "/..", error_message);
-        int right_x = element.getLocation().getX();
+        WebElement element = this.waitForElementPresent(locator + "/..", error_message);
+        int left_x = element.getLocation().getX();
         int upper_y = element.getLocation().getY();
         int lower_y = upper_y + element.getSize().getHeight();
         int middle_y = (upper_y + lower_y) / 2;
         int width = element.getSize().getWidth();
 
-        int point_to_click_x = (right_x + width) - 3;
+        int point_to_click_x = (left_x + width) - 10;
         int point_to_click_y = middle_y;
 
         TouchAction action = new TouchAction(driver);
-        action.tap(PointOption.point(point_to_click_x, point_to_click_y));
+        action.tap(PointOption.point(point_to_click_x, point_to_click_y)).perform();
     }
 
     public void swipeElementToLeft(String locator, String error_message){
         WebElement element = waitForElementPresent(locator, error_message);
+        System.out.println(element.getSize());
         int left_x = element.getLocation().getX();
         int right_x = left_x + element.getSize().getWidth();
         int upper_y = element.getLocation().getY();

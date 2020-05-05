@@ -14,6 +14,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
                 MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input";
                 MY_LIST_OK_BUTTON = "xpath://*[@text='OK']";
                 CLOSE_ARTICLE_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageButton']";
+        EXISTING_LIST_TITLE = "id:org.wikipedia:id/item_title";
     }
 
     public AndroidArticlePageObject(AppiumDriver driver){

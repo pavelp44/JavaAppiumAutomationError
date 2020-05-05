@@ -14,7 +14,8 @@ import org.openqa.selenium.WebElement;
         ADD_TO_MY_LIST_OVERLAY,
         MY_LIST_NAME_INPUT,
         MY_LIST_OK_BUTTON,
-        CLOSE_ARTICLE_BUTTON;
+        CLOSE_ARTICLE_BUTTON,
+        EXISTING_LIST_TITLE;
 
 
 
@@ -93,6 +94,25 @@ import org.openqa.selenium.WebElement;
         mainPageObject.waitAllTestViewsToRender();
 
     }
+
+        public void addArticleToExistingList(){
+            MainPageObject mainPageObject = new MainPageObject(driver);
+
+            mainPageObject.waitForElementAndClick(
+                    OPTIONS_BUTTON,
+                    "Cannot find three dots menu",
+                    5
+            );
+
+            mainPageObject.waitAllTestViewsToRender();
+
+            mainPageObject.waitForElementAndClick(
+                    OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                    "Cannot find 'Add to reading list' ",
+                    5);
+
+            mainPageObject.waitForElementAndClick(EXISTING_LIST_TITLE, "Cannot find Existing reading list", 5);
+        }
 
     public void close_article(){
         this.waitForElementAndClick(CLOSE_ARTICLE_BUTTON,
